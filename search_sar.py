@@ -6,11 +6,11 @@ def parse_args():
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("TOKEN", type=str, help="your Tellus API TOKEN")
-    parser.add_argument("--Palsar_Type", type=str, default="L2.1", help="Specify L2.1 or L1.1")
-    parser.add_argument("--start_datetime", type=str, default="2017-04-21", help="search start datetime")
-    parser.add_argument("--end_datetime", type=str, default="2021-12-30", help="search end datetime")
-    parser.add_argument("--lat", type=float, default=139.692101, help="search center latitude")
-    parser.add_argument("--lon", type=float, default=35.689634, help="search center longitude") 
+    parser.add_argument("-p", "--Palsar_Type", type=str, default="L2.1", help="Specify L2.1 or L1.1")
+    parser.add_argument("-s", "--start_datetime", type=str, default="2017-04-21", help="search start datetime")
+    parser.add_argument("-e", "--end_datetime", type=str, default="2021-12-30", help="search end datetime")
+    parser.add_argument("-lat", "--lat", type=float, default=139.692101, help="search center latitude")
+    parser.add_argument("-lon", "--lon", type=float, default=35.689634, help="search center longitude") 
     args = parser.parse_args()
 
     return args
@@ -18,7 +18,7 @@ def parse_args():
 
 def make_config(args):
     config = {}
-    config['TOKEN'] = args.Token
+    config['TOKEN'] = args.TOKEN
 
     if args.Palsar_Type == "L2.1":
         # Palsar-2, L2.1
@@ -40,6 +40,8 @@ def make_config(args):
              ]
     
     config['intersects'] = make_inter(args.lat, args.lon)
+    config['lat'] = args.lat
+    config['lon'] = args.lon
 
     return config
 
@@ -91,9 +93,9 @@ def search_palsar2_l11(config, paginate=None, next_url=''):
 def main():
     args = parse_args()
     config = make_config(args)
-    lat = config.lat
-    lon = config.lon
-
+    lat = config['lat']
+    lon = config['lon']
+    
     ret = search_palsar2_l11(config)
 
     for i in ret['features']:
@@ -105,7 +107,7 @@ def main():
         lat_max = max([geo[0][i][1] for i in range(4)])
         if lat > lat_min and lat < lat_max and lon > lon_min and lon < lon_max:
             print(i['id'], pro['palsar2:beam'], pro['sat:relative_orbit'], pro['tellus:sat_frame'], pro['start_datetime'])
-
+    
 
 if __name__ == "__main__":
     main()

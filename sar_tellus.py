@@ -14,15 +14,15 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("TOKEN", type=str, help="your Tellus API TOKEN")
     parser.add_argument("data_id", type=str, help="data id obtained from search_sar.py")
-    parser.add_argument("--Palsar_Type", type=str, default="L2.1", help="specify L2.1 or L1.1")
-    parser.add_argument("--print_detail", type=str, default="True", help="print the data detail or not")
+    parser.add_argument("-p", "--Palsar_Type", type=str, default="L2.1", help="specify L2.1 or L1.1")
+    parser.add_argument("-print", "--print_detail", type=str, default="True", help="print the data detail or not")
     args = parser.parse_args()
 
     return args
 
 def make_config(args):
     config = {}
-    config['TOKEN'] = args.Token
+    config['TOKEN'] = args.TOKEN
     config['dataId'] = args.data_id
     config['print_detail'] = args.print_detail
 
@@ -121,3 +121,6 @@ def main():
                     if chunk:
                         f.write(chunk)
                         f.flush()
+
+if __name__ == "__main__":
+    main()
