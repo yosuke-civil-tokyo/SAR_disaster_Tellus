@@ -87,7 +87,7 @@ def main():
 
     # depict the extracted disaster area on RGB image
     if args.overlay:
-        clipped_img_path = args.overlay + '{}_MULPAN.tif'.format(place)
+        clipped_img_path = args.overlay
         make_img(damaged_area_cord, damaged_area_cord2, img_cord, ori_path=clipped_img_path, tgt_path=sar_data_dir+'data/output/')
 
     return None

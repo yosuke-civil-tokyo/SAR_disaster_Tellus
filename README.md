@@ -14,6 +14,7 @@ You need to run the part of searching and getting SAR images on the Tellus envir
     ```
     python search_sar.py [TOKEN] -p [L2.1] -s [search start date] -e [search end date] -lat [region's lat] -lon [region's lon]
     ```
+    Check the interferometric pair exists.  
     For [search start date] and [search end date], use yyyy-mm-dd style. [search end date] may be set as one or two weeks later of your target disaster.  
 
 2. Obtain the pair of images. Input the dataset_id you searched above.  
@@ -23,6 +24,15 @@ You need to run the part of searching and getting SAR images on the Tellus envir
     Now ./data/raw_sar_L2/ includes downloaded SAR data.
 
 ## Extract damaged areas
+### Prerequisites
+- a pair of SAR image
+- the target region (rectangle)
+- the RGB tiff image (if you want to visualize on it)
 
+### flow
+1. Run below (make sure you've already obtained image like above and 'data/raw_sar_L2' contains your data)
 
+    ```
+    python main.py -ulx [top left longutude] -uly [top left latitude] -lrx [bottom right longitude] -lry [bottom right longitude] -place [name your region] -overlay [your RGB image path]
+    ```
 
