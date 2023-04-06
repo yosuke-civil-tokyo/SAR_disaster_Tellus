@@ -4,6 +4,14 @@ This repository is for obtaining a pair of SAR images from [Tellus API](https://
 You need to run the part of searching and getting SAR images on the Tellus environment. (access through [here](https://www.tellusxdp.com/ja/))  
 For data directory structure, check data/README.md
 
+## Environment
+Make a small environment for this project to run python files.  
+You can just
+    ```
+    conda env create -f env.yml
+    conda activate sar
+    ```
+
 ## Obtain images
 ### Prerequisites
 - Tellus API TOKEN
