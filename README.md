@@ -6,11 +6,12 @@ For data directory structure, check data/README.md
 
 ## Environment
 Make a small environment for this project to run python files.  
-You can just
-    ```
-    conda env create -f env.yml
-    conda activate sar
-    ```
+You can just  
+
+```
+conda env create -f env.yml  
+conda activate sar
+```
 
 ## Obtain images
 ### Prerequisites
