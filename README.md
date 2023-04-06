@@ -38,4 +38,4 @@ For data directory structure, check data/README.md
     python main.py -ulx [top left longutude] -uly [top left latitude] -lrx [bottom right longitude] -lry [bottom right longitude] -place [name your region] -road [your road data path] -overlay [your RGB image path]
     ```
     For road data, edge file (.csv) and road mask (.csv) are required.  
-    Road data creation is from other repository folked from [SpaceNet](https://github.com/avanetten/cresi).
+    Road data creation is from other repository forked from [SpaceNet](https://github.com/avanetten/cresi).
