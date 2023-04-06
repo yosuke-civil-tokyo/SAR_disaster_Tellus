@@ -19,6 +19,7 @@ def parse_args():
     parser.add_argument('-lrx', type=float, default=139.8375)
     parser.add_argument('-lry', type=float, default=35.641667)
     parser.add_argument('-place', type=str, default='toyosu')
+    parser.add_argument('-road', type=str, default=None)
     parser.add_argument('-overlay', type=str, default=None)
     args = parser.parse_args()
 
@@ -63,27 +64,29 @@ def main():
     df_damaged = pd.DataFrame(np.concatenate([damaged_area_cord,damaged_area_cord2], 0))
     df_damaged.to_csv(mask_dir+'damaged_cord.csv')
 
-    road_mask_table = pd.read_csv(mask_dir+'pix_to_edge.csv')
-    edge_data = pd.read_csv(output_dir+'edge_for_sim.csv')
-    edge_data['damage_pix'] = 0
+    # aggregate damages to roads
+    if args.road:
+        road_mask_table = pd.read_csv(args.road+'pix_to_edge.csv')
+        edge_data = pd.read_csv(args.road+'edge_for_sim.csv')
+        edge_data['damage_pix'] = 0
 
-    ulx = min(df_mesh['ulx'])
-    uly = max(df_mesh['uly'])
-    lrx = max(df_mesh['lrx'])
-    lry = min(df_mesh['lry'])
-    img_cord = [ulx, uly, lrx, lry]
+        ulx = min(df_mesh['ulx'])
+        uly = max(df_mesh['uly'])
+        lrx = max(df_mesh['lrx'])
+        lry = min(df_mesh['lry'])
+        img_cord = [ulx, uly, lrx, lry]
 
-    edge_data_with_water = distribute_to_road(road_mask_table.values, damaged_area_cord, edge_data, img_cord, h, w, meshsize)
-    edge_data_with_water['damage'] = (edge_data_with_water['damage_pix'].values / (edge_data_with_water['Lanes'].values * 3.5 * edge_data_with_water['length'].values / 2)).clip(0, 1)
-    edge_data_with_damage = distribute_to_road(road_mask_table.values, damaged_area_cord2, edge_data_with_water, img_cord, h, w, meshsize)
-    edge_data_with_damage['damage'] = (edge_data_with_damage['damage_pix'].values / (edge_data_with_damage['Lanes'].values*3.5 * edge_data_with_damage['length'].values/2)).clip(0, 1)
+        edge_data_with_water = distribute_to_road(road_mask_table.values, damaged_area_cord, edge_data, img_cord, h, w, meshsize)
+        edge_data_with_water['damage'] = (edge_data_with_water['damage_pix'].values / (edge_data_with_water['Lanes'].values * 3.5 * edge_data_with_water['length'].values / 2)).clip(0, 1)
+        edge_data_with_damage = distribute_to_road(road_mask_table.values, damaged_area_cord2, edge_data_with_water, img_cord, h, w, meshsize)
+        edge_data_with_damage['damage'] = (edge_data_with_damage['damage_pix'].values / (edge_data_with_damage['Lanes'].values*3.5 * edge_data_with_damage['length'].values/2)).clip(0, 1)
 
-    print('Num of flooded Edges : {}'.format(sum(edge_data_with_water['damage'].values != 0)))
-    print('Num of heavily flooded Edges : {}'.format(sum(edge_data_with_water['damage'].values >= 0.5)))
-    print('Num of damaged Edges : {}'.format(sum(edge_data_with_damage['damage'].values != 0)))
-    print('Num of heavily damaged Edges : {}'.format(sum(edge_data_with_damage['damage'].values >= 0.5)))
-    edge_data_with_water.drop('damage_pix', axis=1).to_csv(output_dir + 'edge_for_sim_withflood.csv', index=False)
-    edge_data_with_damage.drop('damage_pix', axis=1).to_csv(output_dir+'edge_for_sim_withdamage.csv', index=False)
+        print('Num of flooded Edges : {}'.format(sum(edge_data_with_water['damage'].values != 0)))
+        print('Num of heavily flooded Edges : {}'.format(sum(edge_data_with_water['damage'].values >= 0.5)))
+        print('Num of damaged Edges : {}'.format(sum(edge_data_with_damage['damage'].values != 0)))
+        print('Num of heavily damaged Edges : {}'.format(sum(edge_data_with_damage['damage'].values >= 0.5)))
+        edge_data_with_water.drop('damage_pix', axis=1).to_csv(output_dir + 'edge_for_sim_withflood.csv', index=False)
+        edge_data_with_damage.drop('damage_pix', axis=1).to_csv(output_dir + 'edge_for_sim_withdamage.csv', index=False)
 
     # depict the extracted disaster area on RGB image
     if args.overlay:

@@ -1,7 +1,8 @@
 # Differential Interferometric SAR
 ## The first note
-This repository is for obtaining a pair of SAR images from [Tellus API](https://www.tellusxdp.com/ja/api-reference/), and estimating road-areas effected by flood referring to [a paper](https://www.jstage.jst.go.jp/article/jscejsp/77/2/77_I_33/_article/-char/ja/) or [a report from NILIM](http://www.nilim.go.jp/lab/bcg/siryou/tnn/tnn1110pdf/ks1110_06.pdf).  
+This repository is for obtaining a pair of SAR images from [Tellus API](https://www.tellusxdp.com/ja/api-reference/), and estimating road-areas effected by flood referring to [a paper](https://www.jstage.jst.go.jp/article/jscejsp/77/2/77_I_33/_article/-char/ja/) or [a report from NILIM](http://www.nilim.go.jp/lab/bcg/siryou/tnn/tnn1110pdf/ks1110_06.pdf)  
 You need to run the part of searching and getting SAR images on the Tellus environment. (access through [here](https://www.tellusxdp.com/ja/))  
+For data directory structure, check data/README.md
 
 ## Obtain images
 ### Prerequisites
@@ -28,11 +29,13 @@ You need to run the part of searching and getting SAR images on the Tellus envir
 - a pair of SAR image
 - the target region (rectangle)
 - the RGB tiff image (if you want to visualize on it)
+- road data (if you aggregate results on road)
 
 ### flow
 1. Run below (make sure you've already obtained image like above and 'data/raw_sar_L2' contains your data)
 
     ```
-    python main.py -ulx [top left longutude] -uly [top left latitude] -lrx [bottom right longitude] -lry [bottom right longitude] -place [name your region] -overlay [your RGB image path]
+    python main.py -ulx [top left longutude] -uly [top left latitude] -lrx [bottom right longitude] -lry [bottom right longitude] -place [name your region] -road [your road data path] -overlay [your RGB image path]
     ```
-
+    For road data, edge file (.csv) and road mask (.csv) are required.  
+    Road data creation is from other repository folked from [SpaceNet](https://github.com/avanetten/cresi).
